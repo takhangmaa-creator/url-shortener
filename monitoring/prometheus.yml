@@ -15,6 +15,6 @@ scrape_configs:
   - job_name: 'laravel-app'
     metrics_path: '/metrics'        
     static_configs:
-      - targets: ['app:8000']
+      - targets: ['app:8081']
         labels:
-          service: 'laravel'
+          service: 'laravel' 
