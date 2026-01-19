@@ -23,13 +23,7 @@ return new class extends Migration
             $table->index('short_code');
         });
 
-        Schema::create('url_clicks', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('url_id')->constrained()->cascadeOnDelete();
-            $table->timestamp('clicked_at')->useCurrent();
-
-            $table->index(['url_id', 'clicked_at']);
-        });
+       
     }
 
     /**
@@ -37,7 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('url_clicks');
         Schema::dropIfExists('urls');
     }
 };

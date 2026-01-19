@@ -1,0 +1,99 @@
+{
+  "dashboard": {
+    "id": null,
+    "title": "URL Shortener Metrics",
+    "timezone": "browser",
+    "panels": [
+      {
+        "type": "stat",
+        "title": "Total Redirects",
+        "targets": [
+          {
+            "expr": "sum(rate(redirects_total[1m]))",
+            "refId": "A"
+          }
+        ],
+        "gridPos": {"x":0,"y":0,"w":6,"h":4}
+      },
+      {
+        "type": "time series",
+        "title": "HTTP Requests",
+        "targets": [
+          {
+            "expr": "sum(rate(http_requests_total[1m]))",
+            "refId": "A"
+          }
+        ],
+        "gridPos": {"x":6,"y":0,"w":6,"h":4}
+      },
+      {
+        "type": "time series",
+        "title": "HTTP 5xx Errors",
+        "targets": [
+          {
+            "expr": "sum(rate(http_requests_total{status=~\"5..\"}[1m]))",
+            "refId": "A"
+          }
+        ],
+        "gridPos": {"x":0,"y":4,"w":6,"h":4}
+      },
+      {
+        "type": "time series",
+        "title": "Redirect Latency P50",
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.50, sum(rate(redirect_latency_seconds_bucket[5m])) by (le))",
+            "refId": "A"
+          }
+        ],
+        "gridPos": {"x":6,"y":4,"w":6,"h":4}
+      },
+      {
+        "type": "time series",
+        "title": "Redirect Latency P95",
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, sum(rate(redirect_latency_seconds_bucket[5m])) by (le))",
+            "refId": "A"
+          }
+        ],
+        "gridPos": {"x":0,"y":8,"w":6,"h":4}
+      },
+      {
+        "type": "time series",
+        "title": "Redirect Latency P99",
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.99, sum(rate(redirect_latency_seconds_bucket[5m])) by (le))",
+            "refId": "A"
+          }
+        ],
+        "gridPos": {"x":6,"y":8,"w":6,"h":4}
+      },
+      {
+        "type": "time series",
+        "title": "Redis Cache Hits",
+        "targets": [
+          {
+            "expr": "rate(cache_hit_total[1m])",
+            "refId": "A"
+          }
+        ],
+        "gridPos": {"x":0,"y":12,"w":6,"h":4}
+      },
+      {
+        "type": "time series",
+        "title": "Redis Cache Misses",
+        "targets": [
+          {
+            "expr": "rate(cache_miss_total[1m])",
+            "refId": "A"
+          }
+        ],
+        "gridPos": {"x":6,"y":12,"w":6,"h":4}
+      }
+    ],
+    "schemaVersion": 37,
+    "version": 1
+  }
+}

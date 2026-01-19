@@ -23,7 +23,7 @@ services:
     depends_on:
       - app
     networks:
-      - url_shortener
+      - url_shortenerhttp://url_shortener_nginx/metrics
 
   db:
     image: postgres:16-alpine

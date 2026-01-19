@@ -8,13 +8,13 @@ global:
 scrape_configs:
   - job_name: 'prometheus'
     static_configs:
-      - targets:  ['localhost:9090']
+      - targets:  ['url_shortener_prometheus:9090']
         labels:
           service: 'prometheus'
 
   - job_name: 'laravel-app'
     metrics_path: '/metrics'        
     static_configs:
-      - targets: ['app:8081']
+      - targets: ['url_shortener_nginx:80']
         labels:
           service: 'laravel' 
