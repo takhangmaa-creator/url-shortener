@@ -32,3 +32,6 @@ WORKDIR /var/www/html
 RUN chown -R www-data:www-data /var/www/html
 
 USER www-data
+
+# Run the entrypoint file
+ENTRYPOINT [ "sh", "entrypoint.sh" ]
