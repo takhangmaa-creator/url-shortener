@@ -19,14 +19,22 @@ class RedirectController extends Controller
 
     public function __invoke(string $code)
     {
+        $serverName = gethostname();
+        // start timing for latency measurement
+        $start = microtime(true);
         try {
-            // start timing for latency measurement
-            $start = microtime(true);
-            $url = Cache::remember(
-                "short_url:$code",
-                now()->addHours(6),
-                fn() => Url::where('short_code', $code)->firstOrFail()
-            );
+            $key = "short_url:$code";
+            $url = cache::get($key);
+
+            if (! $url) {
+                $url = Cache::lock("short_url_lock:$code", 10)->block(5, function () use ($code, $key) {
+                    $url = Url::where('short_code', $code)
+                        ->select('original_url', 'is_active', 'expires_at')
+                        ->firstOrFail();
+                    Cache::put($key, $url, now()->addHours(6));
+                    return $url;
+                });
+            }
 
             if (! $url->is_active || ($url->expires_at && now()->gt($url->expires_at))) {
                 $this->metrics
@@ -47,7 +55,7 @@ class RedirectController extends Controller
                 ->histogram('redirect_latency_seconds', 'Redirect latency in seconds')
                 ->observe($latency);
 
-            return redirect()->away($url->original_url);
+            return redirect()->away($url->original_url, 301)->header('X-Served-By', $serverName);
         } catch (ModelNotFoundException $e) {
             $this->metrics
                 ->counter('redirects_total', 'Total redirect attempts', ['status'])

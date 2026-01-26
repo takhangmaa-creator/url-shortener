@@ -35,7 +35,7 @@ class UrlController extends Controller
                 ->histogram('url_operation_latency_seconds', 'URL operation latency', ['operation'])
                 ->observe($latency, ['operation' => 'create']);
 
-            return response()->json(['short_url' => url("/api/url/{$url->short_code}")], Response::HTTP_CREATED);
+            return response()->json([ 'short_code' => $url->short_code,'short_url' => url("/api/url/{$url->short_code}")], Response::HTTP_CREATED);
         } catch (\Exception $e) {
             $this->metricsService
                 ->counter('url_operations_total', 'Total URL operations', ['operation', 'status'])

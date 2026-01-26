@@ -41,5 +41,8 @@ COPY --chown=www-data:www-data . .
 
 USER www-data
 
+# Add at the end of PHP Dockerfile
+COPY docker/php/fpm/www.conf /usr/local/etc/php-fpm.d/www.conf
+
 # Run the entrypoint file
 ENTRYPOINT [ "sh", "entrypoint.sh" ]

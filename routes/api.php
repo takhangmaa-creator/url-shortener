@@ -7,3 +7,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/urls', [UrlController::class, 'store']);
 Route::get('url/{code}', RedirectController::class);
+Route::get('health', function () {
+    return 200;
+});
